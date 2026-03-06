@@ -104,11 +104,6 @@ To make the workflow faster, I used **Gemini** to help generate a script that au
 
 ### 🔹 Gemini-assisted automation code
 <p align="center">
-  <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/understanding-the-data/images/8.png?raw=true" width="900" alt="Gemini automation code for repetitive PySpark tasks">
-</p>
-
-### 🔹 Automated output for all datasets
-<p align="center">
   <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/understanding-the-data/images/4.png?raw=true" width="900" alt="Creating Spark Session">
 </p>
 
@@ -120,9 +115,15 @@ To make the workflow faster, I used **Gemini** to help generate a script that au
   <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/understanding-the-data/images/6.png?raw=true" width="900" alt="Printing schema of dataset">
 </p>
 
+### 🔹 Automated output for all datasets
+
 <p align="center">
   <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/understanding-the-data/images/7.png?raw=true" width="900" alt="Showing sample rows of dataset">
 </p> 
+
+<p align="center">
+  <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/understanding-the-data/images/8.png?raw=true" width="900" alt="Gemini automation code for repetitive PySpark tasks">
+</p>
 
 <p align="center">
   <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/understanding-the-data/images/10.png?raw=true" width="900" alt="Automated schema and table preview output">
