@@ -137,14 +137,24 @@ This automation improved efficiency and ensured that all datasets were inspected
 
 From the initial inspection, the following observations were identified:
 
-- 📌 The dataset contains **9 interconnected tables**
-- 🕒 Several tables include **timestamp columns** related to order purchase, approval, shipping, and delivery
-- 💰 Financial fields such as `price` and `freight_value` are stored as numeric values
-- 🔗 Important keys appear across multiple datasets, including:
+- 📌 The dataset contains **9 interconnected tables** representing different parts of the Brazilian e-commerce ecosystem such as customers, orders, products, payments, sellers, and reviews.
+
+- 🕒 Several tables include **timestamp columns** related to order lifecycle events such as:
+  - `order_purchase_timestamp`
+  - `order_approved_at`
+  - `order_delivered_carrier_date`
+  - `order_delivered_customer_date`
+
+- 💰 Financial fields such as `price` and `freight_value` are stored as **numeric data types**, which will later allow aggregation and revenue analysis.
+
+- 🔗 Important relational keys appear across multiple datasets, enabling joins between tables:
   - `customer_id`
   - `order_id`
   - `product_id`
   - `seller_id`
+
+- ⚠️ Some CSV files contain **null or missing values** in certain columns (especially timestamps and optional attributes).  
+  These missing values will need to be handled during the **Data Cleaning and Transformation stage** to ensure data quality and accurate analysis.
 
 These fields will play an important role in the next stages of the project, especially for **data integration, aggregation, and analytics**.
 
