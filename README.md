@@ -160,221 +160,247 @@ These fields will play an important role in the next stages of the project, espe
 
 ---
 
-2️⃣ Data Ingestion & Exploration
+# 2️⃣ Data Ingestion & Exploration
 
-After understanding the dataset structure, the next step is to move the data into a distributed processing environment and begin performing large-scale exploration using Apache Spark.
+After understanding the dataset structure, the next step is to move the data into a **distributed processing environment** and begin performing **large-scale exploration using Apache Spark**.
 
 This stage focuses on two main objectives:
 
-📥 Ingesting the raw datasets into HDFS
+- 📥 **Ingesting the raw datasets into HDFS**
+- 🔎 **Exploring the data using distributed Spark processing**
 
-🔎 Exploring the data using distributed Spark processing
+---
 
-⚙️ Technologies Used
+## ⚙️ Technologies Used
 
 This workflow was implemented using the following technologies:
 
-☁️ Google Cloud Dataproc
+- ☁️ **Google Cloud Dataproc**
+- 🗂️ **Hadoop Distributed File System (HDFS)**
+- ⚡ **Apache Spark (PySpark)**
+- 📓 **JupyterLab on Dataproc**
 
-🗂️ Hadoop Distributed File System (HDFS)
+Using this architecture allows the project to simulate a **real-world data engineering environment**, where:
 
-⚡ Apache Spark (PySpark)
+- data is stored in **distributed storage**
+- data processing is executed using **parallel computation**
+- large datasets can be handled **efficiently and reliably**
 
-📓 JupyterLab on Dataproc
+---
 
-Using this architecture allows the project to simulate a real-world data engineering environment, where:
+# 📥 Data Ingestion to HDFS
 
-data is stored in distributed storage
+Instead of processing the data locally, the datasets were uploaded into **Hadoop Distributed File System (HDFS)**.
 
-processing is executed using parallel computing
+### 📌 HDFS provides:
 
-large datasets can be handled efficiently and reliably
+- 🗂️ **Distributed storage**
+- 🛡️ **Fault tolerance**
+- ⚡ **Scalable data processing**
 
-📥 Data Ingestion to HDFS
+This ensures that **Spark jobs can efficiently read and process data across multiple nodes in the cluster**.
 
-Instead of processing the data locally, the datasets were uploaded into Hadoop Distributed File System (HDFS).
+---
 
-📌 HDFS provides:
-
-🗂️ Distributed storage
-
-🛡️ Fault tolerance
-
-⚡ Scalable data processing
-
-This ensures that Spark jobs can efficiently read and process data across multiple nodes in the cluster.
-
-🔄 Data Ingestion Workflow
+## 🔄 Data Ingestion Workflow
 
 The ingestion process included the following steps:
 
-1️⃣ Creating the HDFS directory
+1. 📁 **Creating the HDFS directory**
+2. ⬆️ **Uploading the CSV files to HDFS**
+3. 🔎 **Verifying the uploaded datasets**
+4. ⚡ **Reading the datasets using Spark**
 
-2️⃣ Uploading the CSV files to HDFS
+---
 
-3️⃣ Verifying the uploaded datasets
+### 🔹 Uploading datasets to HDFS
 
-4️⃣ Reading the datasets using Spark
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Ingestion-%26-Exploration/images/data-ingestion-to-hdfs.png?raw=true" width="900" alt="Uploading dataset to HDFS">
+</p>
 
-🔹 Uploading datasets to HDFS
-<p align="center"> <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Ingestion-%26-Exploration/images/data-ingestion-to-hdfs.png?raw=true" width="900" alt="Uploading dataset to HDFS"> </p> <p align="center"> <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Ingestion-%26-Exploration/images/data-ingestion-hdfs.png?raw=true" width="900" alt="HDFS directory containing ingested datasets"> </p>
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Ingestion-%26-Exploration/images/data-ingestion-hdfs.png?raw=true" width="900" alt="HDFS directory containing ingested datasets">
+</p>
 
-This step ensures that all datasets are stored in a distributed storage system instead of the local filesystem.
+This step ensures that all datasets are stored in a **distributed storage system instead of the local filesystem**.
 
-⚡ Creating the Spark Environment
+---
 
-Once the datasets were stored in HDFS, a Spark environment was initialized inside the Dataproc cluster.
+# ⚡ Creating the Spark Environment
 
-Spark allows distributed processing across multiple worker nodes, making it suitable for handling large-scale datasets.
+Once the datasets were stored in HDFS, a **Spark environment** was initialized inside the Dataproc cluster.
 
-🔹 Starting Spark Session
-<p align="center"> <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Ingestion-%26-Exploration/images/starting-spark-session.png?raw=true" width="900" alt="Starting Spark Session in Dataproc"> </p>
+Spark allows distributed processing across **multiple worker nodes**, making it suitable for handling **large-scale datasets**.
 
-The Spark session initializes the Spark Driver, which coordinates distributed tasks across the cluster.
+### 🔹 Starting Spark Session
 
-📂 Reading Data from HDFS using PySpark
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Ingestion-%26-Exploration/images/starting-spark-session.png?raw=true" width="900" alt="Starting Spark Session in Dataproc">
+</p>
 
-After initializing Spark, the datasets stored in HDFS were loaded into Spark DataFrames.
+The Spark session initializes the **Spark Driver**, which coordinates distributed tasks across the cluster.
+
+---
+
+# 📂 Reading Data from HDFS using PySpark
+
+After initializing Spark, the datasets stored in **HDFS** were loaded into **Spark DataFrames**.
 
 This enables:
 
-distributed queries
+- distributed queries
+- parallel transformations
+- large-scale analytics
 
-parallel transformations
+---
 
-large-scale data analysis
+### 🔹 Reading datasets from HDFS
 
-🔹 Reading datasets from HDFS
-<p align="center"> <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Ingestion-%26-Exploration/images/reading-data-from-hdfs.png?raw=true" width="900" alt="Reading dataset from HDFS using PySpark"> </p>
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Ingestion-%26-Exploration/images/reading-data-from-hdfs.png?raw=true" width="900" alt="Reading dataset from HDFS using PySpark">
+</p>
 
 Each dataset was read using:
 
-spark.read.csv()
-
-header=True
-
-inferSchema=True
+- `spark.read.csv()`
+- `header=True`
+- `inferSchema=True`
 
 These parameters allow Spark to:
 
-automatically detect column names
+- automatically detect **column names**
+- infer **data types**
+- load datasets into **Spark DataFrames**
 
-infer data types
+---
 
-load the datasets into Spark DataFrames
+# 🔎 Distributed Data Exploration (PySpark)
 
-🔎 Distributed Data Exploration (PySpark)
+Once the datasets were loaded into Spark DataFrames, several **data exploration tasks** were performed to better understand the dataset and detect potential data quality issues.
 
-After loading the datasets into Spark, several data exploration tasks were performed to better understand the dataset and detect potential data quality issues.
+### 📊 Exploration tasks included:
 
-📊 Exploration tasks included:
+- 📏 **Checking dataset sizes**
+- 🔁 **Identifying duplicate records**
+- ❓ **Detecting null values**
+- 💳 **Analyzing payment methods**
+- 📦 **Examining order status distribution**
+- 🏆 **Identifying top-selling products**
+- 🚚 **Calculating delivery time**
 
-📏 Checking dataset sizes
+These insights help validate the dataset before moving to the **Data Cleaning and Transformation stage**.
 
-🔁 Identifying duplicate records
+---
 
-❓ Detecting null values
+# 📊 Data Quality Checks
 
-💳 Analyzing payment methods
+## 🔹 Checking for Data Leakage or Missing Rows
 
-📦 Examining order status distribution
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Ingestion-%26-Exploration/images/Data-exploration-check-data-Lekage-or-drop.png?raw=true" width="900" alt="Checking dataset row counts">
+</p>
 
-🏆 Identifying top-selling products
+This step verifies that **no data was lost during ingestion into HDFS**.
 
-🚚 Calculating delivery time
+---
 
-These insights help validate the dataset before moving to the Data Cleaning and Transformation stage.
+## 🔹 Checking for Duplicate Records
 
-📊 Data Quality Checks
-🔹 Checking for Data Leakage or Missing Rows
-<p align="center"> <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Ingestion-%26-Exploration/images/Data-exploration-check-data-Lekage-or-drop.png?raw=true" width="900" alt="Checking dataset row counts"> </p>
-
-This step verifies that no data was lost during ingestion into HDFS.
-
-🔹 Checking for Duplicate Records
-<p align="center"> <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Ingestion-%26-Exploration/images/Data-exploration-check-duplicates.png?raw=true" width="900" alt="Checking duplicate records"> </p>
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Ingestion-%26-Exploration/images/Data-exploration-check-duplicates.png?raw=true" width="900" alt="Checking duplicate records">
+</p>
 
 Duplicate checks were performed on key identifiers such as:
 
-customer_id
+- `customer_id`
+- `order_id`
+- `product_id`
 
-order_id
+This ensures **data integrity before further processing**.
 
-product_id
+---
 
-This ensures data integrity before further processing.
+## 🔹 Checking for Null Values in Columns
 
-🔹 Checking for Null Values in Columns
-<p align="center"> <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Ingestion-%26-Exploration/images/Data-exploration-check-nulls-in-every-columns.png?raw=true" width="900" alt="Checking null values in dataset columns"> </p>
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Ingestion-%26-Exploration/images/Data-exploration-check-nulls-in-every-columns.png?raw=true" width="900" alt="Checking null values in dataset columns">
+</p>
 
 Null analysis helps identify columns that require:
 
-data cleaning
+- data cleaning
+- value imputation
+- transformation
 
-value imputation
+---
 
-transformation
+# 📈 Exploratory Analysis
 
-📈 Exploratory Analysis
+## 💳 Most Preferred Payment Method
 
-In addition to data quality checks, several analytical explorations were performed.
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Ingestion-%26-Exploration/images/Data-exploration-most-preferred-payment.png?raw=true" width="900" alt="Payment method distribution">
+</p>
 
-💳 Most Preferred Payment Method
-<p align="center"> <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Ingestion-%26-Exploration/images/Data-exploration-most-preferred-payment.png?raw=true" width="900" alt="Payment method distribution"> </p>
+This analysis shows the **distribution of payment types used by customers**.
 
-This analysis shows the distribution of payment types used by customers.
+---
 
-📦 Order Status Distribution
-<p align="center"> <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Ingestion-%26-Exploration/images/Data-exploration-Order-status-distribution.png?raw=true" width="900" alt="Order status distribution"> </p>
+## 📦 Order Status Distribution
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Ingestion-%26-Exploration/images/Data-exploration-Order-status-distribution.png?raw=true" width="900" alt="Order status distribution">
+</p>
 
 This analysis provides insights into how many orders were:
 
-📦 delivered
+- 📦 delivered
+- 🚚 shipped
+- ❌ canceled
+- ⚠️ unavailable
+- 🔄 processing
 
-🚚 shipped
+---
 
-❌ canceled
+## 🏆 Top Selling Products
 
-⚠️ unavailable
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Ingestion-%26-Exploration/images/data-exploration-top-selling-products.png?raw=true" width="900" alt="Top selling products analysis">
+</p>
 
-🔄 processing
+Product sales were aggregated using Spark to identify the **highest revenue-generating products**.
 
-🏆 Top Selling Products
-<p align="center"> <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Ingestion-%26-Exploration/images/data-exploration-top-selling-products.png?raw=true" width="900" alt="Top selling products analysis"> </p>
+---
 
-Product sales were aggregated using Spark to identify the highest revenue-generating products.
+## 🚚 Total Delivery Time Analysis
 
-🚚 Total Delivery Time Analysis
-<p align="center"> <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Ingestion-%26-Exploration/images/data-exploration-total-delivery-time.png?raw=true" width="900" alt="Delivery time analysis"> </p>
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Ingestion-%26-Exploration/images/data-exploration-total-delivery-time.png?raw=true" width="900" alt="Delivery time analysis">
+</p>
 
 Delivery time was calculated using:
 
-delivery_time = order_delivered_customer_date - order_purchase_timestamp
-
 This helps evaluate:
 
-logistics efficiency
+- logistics efficiency
+- delivery delays
+- fulfillment performance
 
-delivery delays
+---
 
-customer fulfillment performance
-
-🚀 Next Step
+# 🚀 Next Step
 
 The next stage of this project will focus on:
 
-🧹 Data Cleaning & Transformation
+## 🧹 Data Cleaning & Transformation
 
 This includes:
 
-🧹 handling missing values
+- 🧹 handling missing values  
+- 🔧 correcting inconsistent data  
+- ⏱️ transforming timestamps  
+- 🔗 preparing datasets for integration  
+- 📊 preparing data for analytics  
 
-🔧 correcting inconsistent data
-
-⏱️ transforming timestamps
-
-🔗 preparing datasets for integration
-
-📊 preparing data for analytics
-
-These steps will ensure that the data becomes clean, reliable, and ready for large-scale analytics and data warehousing.
+These steps will ensure that the data becomes **clean, reliable, and ready for large-scale analytics and data warehousing**.
