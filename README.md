@@ -1,163 +1,204 @@
-# Data-Engineering-Real-World-Project-Ecommerce-Dataset
-Step-by-step data engineering project using the Olist Brazilian E-Commerce dataset: ingestion &amp; exploration, cleaning, integration, optimization (cache), and data serving.
+# 🛒 Data Engineering Real-World Project: E-Commerce Dataset
 
+Welcome to this **Data Engineering portfolio project** built using the **Brazilian E-Commerce Public Dataset by Olist**. 🚀  
+This repository documents a step-by-step data engineering workflow, from **understanding raw data** to **distributed ingestion, transformation, optimization, and data serving**.
 
+This project is designed to showcase practical skills in:
 
-1️⃣ Data Understanding
+- 📂 Data Understanding  
+- ⚡ Data Ingestion & Exploration  
+- 🧹 Data Cleaning & Transformation  
+- 🔗 Data Integration & Aggregation  
+- 🚀 Process Optimization  
+- 📊 Data Serving  
 
-The first step of the project is to understand the structure and contents of the dataset before building the data engineering pipeline.
+---
 
-This project uses the Olist Brazilian E-Commerce Public Dataset, which contains multiple CSV files representing different aspects of an e-commerce ecosystem such as:
+## 📌 Dataset Used
 
-Customers
+This project uses the **Brazilian E-Commerce Public Dataset by Olist**, which contains real-world e-commerce data such as:
 
-Orders
+- 👥 Customers  
+- 📦 Orders  
+- 🛍️ Order Items  
+- 💳 Payments  
+- ⭐ Reviews  
+- 🏷️ Products  
+- 🏪 Sellers  
+- 🌍 Geolocation  
+- 📝 Product Category Translation  
 
-Order Items
+These datasets are interconnected and provide a strong foundation for building a complete data engineering pipeline.
 
-Payments
+---
 
-Reviews
+# 1️⃣ Data Understanding
 
-Products
+The first step of the project is to understand the **structure, schema, and contents** of the dataset before building the pipeline.
 
-Sellers
+At this stage, I used **Google Colab** with **PySpark** to:
 
-Geolocation
+- Upload and extract the dataset
+- Read CSV files into Spark DataFrames
+- Create a new `SparkSession`
+- Print the schema of each dataset
+- Preview sample records
+- Automate repetitive dataset inspection using **Gemini**
 
-Product Category Translation
+This step is important because it helps identify:
 
-Understanding these datasets is important before performing transformations, joins, and analytics.
+- the available tables
+- column names and data types
+- possible keys for joining datasets
+- timestamp and numeric fields
+- the overall structure of the e-commerce data
 
-Uploading the Dataset to Google Colab
+---
 
-The initial data exploration was performed in Google Colab.
-The dataset was downloaded from Kaggle and extracted into the working directory.
+## 📂 Uploading the Dataset to Google Colab
 
-Downloading the dataset
+The initial exploration was performed in **Google Colab**.  
+The dataset was first downloaded and extracted into the Colab working directory.
 
-Extracting the dataset
+### 🔹 Downloading the dataset
+<p align="center">
+  <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/understanding-the-data/images/1.png?raw=true" width="900" alt="Downloading dataset in Google Colab">
+</p>
 
-Inspecting the dataset files
+### 🔹 Extracting the dataset
+<p align="center">
+  <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/understanding-the-data/images/2.png?raw=true" width="900" alt="Extracting dataset in Google Colab">
+</p>
 
-This step verifies that all CSV datasets are successfully extracted.
+### 🔹 Inspecting extracted files
+This step verifies that all CSV files were successfully extracted.
 
-The dataset contains multiple CSV files including:
+<p align="center">
+  <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/understanding-the-data/images/3.png?raw=true" width="900" alt="Listing extracted CSV files">
+</p>
 
-olist_customers_dataset.csv
+### 📌 Extracted CSV files include:
+- `olist_customers_dataset.csv`
+- `olist_geolocation_dataset.csv`
+- `olist_order_items_dataset.csv`
+- `olist_order_payments_dataset.csv`
+- `olist_order_reviews_dataset.csv`
+- `olist_orders_dataset.csv`
+- `olist_products_dataset.csv`
+- `olist_sellers_dataset.csv`
+- `product_category_name_translation.csv`
 
-olist_orders_dataset.csv
+---
 
-olist_order_items_dataset.csv
+## ⚡ Creating a Spark Session
 
-olist_order_payments_dataset.csv
+To process the dataset efficiently, I created a **PySpark SparkSession**.
 
-olist_order_reviews_dataset.csv
+<p align="center">
+  <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/understanding-the-data/images/4.png?raw=true" width="900" alt="Creating Spark Session">
+</p>
 
-olist_products_dataset.csv
+The Spark session serves as the entry point for working with Spark DataFrames and distributed data processing.
 
-olist_sellers_dataset.csv
+---
 
-olist_geolocation_dataset.csv
+## 📖 Reading the Dataset with PySpark
 
-product_category_name_translation.csv
+After creating the Spark session, I loaded the dataset into a Spark DataFrame using:
 
-Creating a Spark Session
+- `header=True` → to correctly read column headers  
+- `inferSchema=True` → to automatically detect column data types  
 
-To process the dataset efficiently, a PySpark SparkSession was created.
+<p align="center">
+  <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/understanding-the-data/images/5.png?raw=true" width="900" alt="Reading dataset using PySpark">
+</p>
 
-The Spark session enables distributed data processing using Spark's DataFrame API.
+---
 
-Reading the Dataset with PySpark
+## 🧾 Inspecting the Schema and Previewing the Data
 
-The dataset was then loaded using Spark DataFrames with the following options:
+After reading the dataset, I first inspected the **schema** and then displayed sample rows from the table.
 
-header=True → ensures column headers are read correctly
+### 🔹 Printing the schema
+This step helps identify the structure of the data and the inferred data types.
 
-inferSchema=True → automatically detects column data types
+<p align="center">
+  <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/understanding-the-data/images/6.png?raw=true" width="900" alt="Printing schema of dataset">
+</p>
 
-Inspecting the Dataset
+### 🔹 Showing sample rows
+This confirms that the data was loaded correctly and allows a quick look at the table contents.
 
-After loading the dataset, the schema and sample records were inspected to understand the structure of the data.
+<p align="center">
+  <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/understanding-the-data/images/7.png?raw=true" width="900" alt="Showing sample rows of dataset">
+</p>
 
-Printing the Schema
+---
 
-This shows the data types and column structure of the dataset.
+## 🤖 Automating Repetitive Dataset Inspection with Gemini
 
-Previewing the Data
+Since the Olist dataset contains multiple CSV files, manually repeating the same steps for every file would be inefficient.
 
-Displaying the first rows of the dataset helps verify that the data was loaded correctly.
+To make the workflow faster, I used **Gemini** to help generate a script that automates the repetitive tasks. The script:
 
-Automating Dataset Inspection
+- scans the dataset directory
+- finds all CSV files
+- loads each file into a Spark DataFrame
+- prints the schema
+- shows sample rows for each table
 
-Since the dataset contains multiple CSV files, repeating the same process manually would be inefficient.
+### 🔹 Gemini-assisted automation code
+<p align="center">
+  <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/understanding-the-data/images/8.png?raw=true" width="900" alt="Gemini automation code for repetitive PySpark tasks">
+</p>
 
-To solve this, Gemini was used to help generate a PySpark script that automatically:
+### 🔹 Automated output for all datasets
+<p align="center">
+  <img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/understanding-the-data/images/10.png?raw=true" width="900" alt="Automated schema and table preview output">
+</p>
 
-Lists all CSV files in the dataset directory
+This automation improved efficiency and ensured that all datasets were inspected in a consistent way.
 
-Iterates through each dataset
+---
 
-Loads each CSV file into a Spark DataFrame
+## 📊 Key Findings from Data Understanding
 
-Prints the schema
+From the initial inspection, the following observations were identified:
 
-Displays sample rows
+- 📌 The dataset contains **9 interconnected tables**
+- 🕒 Several tables include **timestamp columns** related to order purchase, approval, shipping, and delivery
+- 💰 Financial fields such as `price` and `freight_value` are stored as numeric values
+- 🔗 Important keys appear across multiple datasets, including:
+  - `customer_id`
+  - `order_id`
+  - `product_id`
+  - `seller_id`
 
-This significantly reduces repetitive work and ensures consistent inspection of all datasets.
+These fields will play an important role in the next stages of the project, especially for **data integration, aggregation, and analytics**.
 
-Automation Code
+---
 
-Automated Output
+# 2️⃣ Data Ingestion & Exploration
 
-The script successfully iterates through every dataset and displays its schema and sample rows.
+In the next stage of the project, the raw datasets will be ingested into a **distributed processing environment**.
 
-Key Findings from Data Understanding
+This phase will use:
 
-From the initial exploration:
+- ☁️ **Google Cloud Dataproc**
+- 🗂️ **Hadoop Distributed File System (HDFS)**
+- ⚡ **Spark Cluster Computing**
 
-The dataset contains 9 interconnected tables
+### 🏗️ Planned Cluster Architecture
+- **Master Node** – responsible for cluster coordination and job scheduling
+- **Worker Nodes** – responsible for parallel data processing and execution
 
-Several tables contain timestamp fields related to purchase, approval, and delivery
+Using a distributed architecture makes it possible to process large datasets more efficiently and prepare the project for scalable data engineering workflows.
 
-Financial values such as price and freight_value are stored as numeric types
+### 📌 This next step will focus on:
+- uploading datasets to **HDFS**
+- configuring the **Dataproc cluster**
+- using **master and worker nodes**
+- running distributed Spark jobs
+- performing large-scale data exploration
 
-Many datasets share common keys such as:
-
-customer_id
-
-order_id
-
-product_id
-
-seller_id
-
-These keys will be important later for data integration and aggregation.
-
-2️⃣ Data Ingestion & Exploration
-
-In the next stage of the project, the raw datasets will be ingested into a distributed processing environment.
-
-The pipeline will use:
-
-Google Cloud Dataproc
-
-Hadoop Distributed File System (HDFS)
-
-Spark clusters
-
-The cluster architecture includes:
-
-Master Node – manages the cluster and job scheduling
-
-Worker Nodes – perform distributed parallel processing
-
-Using a distributed cluster allows the pipeline to scale and process large datasets efficiently.
-
-The next step will focus on:
-
-Uploading datasets to HDFS
-
-Running Spark jobs on the cluster
-
-Performing distributed data exploration
+---
