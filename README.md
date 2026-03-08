@@ -391,16 +391,305 @@ This helps evaluate:
 
 # 🚀 Next Step
 
-The next stage of this project will focus on:
+The next stage of this project focuses on:
 
 ## 🧹 Data Cleaning & Transformation
 
-This includes:
+This stage includes:
 
 - 🧹 handling missing values  
 - 🔧 correcting inconsistent data  
-- ⏱️ transforming timestamps  
-- 🔗 preparing datasets for integration  
-- 📊 preparing data for analytics  
+- 🧾 fixing data types  
+- 📉 removing outliers  
+- 🔗 joining cleaned datasets  
+- 📊 preparing the data for analytics and storage  
 
-These steps will ensure that the data becomes **clean, reliable, and ready for large-scale analytics and data warehousing**.
+These steps ensure that the dataset becomes **clean, consistent, reliable, and ready for large-scale analytics and downstream processing**.
+
+---
+
+## 🔹 Reading the Data from HDFS
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/Data-Cleaning-%26-Transformation/images/data-cleaning-reading-data.png?raw=true" width="900" alt="Reading the Olist dataset from HDFS using PySpark">
+</p>
+
+The first step in data cleaning and transformation is loading all raw CSV files from **HDFS** into PySpark DataFrames.
+
+The following datasets were read from `/data/olist`:
+
+- `olist_customers_dataset.csv`
+- `olist_orders_dataset.csv`
+- `olist_order_items_dataset.csv`
+- `olist_order_payments_dataset.csv`
+- `olist_order_reviews_dataset.csv`
+- `olist_products_dataset.csv`
+- `olist_sellers_dataset.csv`
+- `olist_geolocation_dataset.csv`
+- `product_category_name_translation.csv`
+
+This establishes the working DataFrames needed for cleaning and transformation.
+
+---
+
+## 🔹 Identifying Missing Values with a Custom Function
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/Data-Cleaning-%26-Transformation/images/data-transforming-identifying-missing-values-with-own-define-function.png?raw=true" width="900" alt="Identifying missing values using a custom PySpark function">
+</p>
+
+A custom function was created to inspect each DataFrame and count the number of null values per column.
+
+This made it easier to:
+
+- detect missing values efficiently
+- compare completeness across all tables
+- decide which columns require dropping, filling, or imputation
+
+This step is important before applying any cleaning rules.
+
+---
+
+## 🔹 Dropping Rows with Missing Critical Fields in `orders_df`
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/Data-Cleaning-%26-Transformation/images/data-transforming-drop-order-df-data-if-missing-order-id-customer-id-order-status.png?raw=true" width="900" alt="Dropping rows with missing critical fields in orders dataframe">
+</p>
+
+Rows with missing values in critical columns were removed from `orders_df`, specifically:
+
+- `order_id`
+- `customer_id`
+- `order_status`
+
+These fields are essential because without them, the order record becomes incomplete and unreliable for joining and analysis.
+
+This helps preserve **data integrity** in the transformed dataset.
+
+---
+
+## 🔹 Removing Duplicate Records in `customer_df`
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/Data-Cleaning-%26-Transformation/images/data-transformation-removing-duplicates-in-customer-id.png?raw=true" width="900" alt="Removing duplicate customer records using customer_id">
+</p>
+
+Duplicate rows in `customer_df` were removed based on the `customer_id` column.
+
+This ensures that:
+
+- each customer record is unique
+- duplicate customer entries do not affect joins
+- the cleaned customer table remains consistent for integration
+
+Removing duplicates is a core part of improving dataset quality before combining tables.
+
+---
+
+## 🔹 Casting `customer_zip_code_prefix` to String
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/Data-Cleaning-%26-Transformation/images/data-transforming-casting-the-right-data-type-for-zip-code-in-customer-df.png?raw=true" width="900" alt="Casting customer zip code prefix to string">
+</p>
+
+The `customer_zip_code_prefix` column was converted from integer to string.
+
+This transformation is necessary because zip codes are **identifiers**, not values for mathematical computation.
+
+Casting it to string helps:
+
+- preserve formatting correctly
+- avoid losing leading digits
+- prepare the field for grouping, filtering, and location-based analysis
+
+---
+
+## 🔹 Converting `payment_type` into More Readable Labels
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/Data-Cleaning-%26-Transformation/images/data-transforming-convert-the-payment-type-to-more-readable.png?raw=true" width="900" alt="Converting payment type values into readable labels">
+</p>
+
+The values in `payment_type` were transformed into more readable and understandable labels.
+
+Examples include converting raw values such as:
+
+- `credit_card` → `Credit Card`
+- `boleto` → `Bank Transfer`
+- `debit_card` → `Debit Card`
+
+This improves readability for:
+
+- reports
+- dashboards
+- analytics outputs
+- business presentation of the dataset
+
+---
+
+## 🔹 Removing Outliers in `order_items_df` Using `approxQuantile`
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/Data-Cleaning-%26-Transformation/images/data-transformation-removing-outliers-in-order-items-price.png?raw=true" width="900" alt="Removing outliers in order item prices using approxQuantile">
+</p>
+
+Outliers in the `price` column of `order_items_df` were removed using `approxQuantile()`.
+
+This method was used to determine:
+
+- lower cutoff
+- upper cutoff
+
+Then, rows outside the acceptable price range were filtered out.
+
+This helps:
+
+- reduce noise in the data
+- avoid extreme price values affecting analysis
+- improve the quality of revenue and pricing insights
+
+---
+
+## 🔹 Learning Imputation by Creating a New Nullable Payment Column
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/Data-Cleaning-%26-Transformation/images/data-transforming-purposely-make-a-new-column-with-null-value-to-learn-imputer.png?raw=true" width="900" alt="Using PySpark Imputer on a purposely created nullable payment column">
+</p>
+
+To demonstrate and practice missing value imputation, a new version of the `payment_value` column was intentionally created with null values.
+
+Then, the PySpark `Imputer` from `pyspark.ml.feature` was used to fill those missing values.
+
+This step was done for learning purposes to understand how PySpark handles numerical imputation in practice.
+
+It shows how imputation can be applied to:
+
+- continuous numerical values
+- incomplete numeric columns
+- machine learning preprocessing workflows
+
+---
+
+## 🔹 Joining the Cleaned DataFrames into `order_with_details`
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/Data-Cleaning-%26-Transformation/images/data-transformation-joining-cleaned-df.png?raw=true" width="900" alt="Joining cleaned dataframes into order_with_details">
+</p>
+
+After cleaning the individual tables, the transformed DataFrames were joined to create a consolidated DataFrame called `order_with_details`.
+
+This join combines important information from multiple datasets, including:
+
+- orders
+- order items
+- payments
+- customers
+
+This integrated table serves as the main analytical dataset for later processing and reporting.
+
+---
+
+## 🔹 Calculating Total Revenue per Seller
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/Data-Cleaning-%26-Transformation/images/data-transformation-getting-the-total-revenue-per-seller-by-joining-order-item-cleaned-df-and-seller-df.png?raw=true" width="900" alt="Calculating total revenue per seller">
+</p>
+
+A seller-level revenue DataFrame was created by grouping records by `seller_id` and summing the `price` column.
+
+This produced `total_revenue_per_seller`, which helps identify:
+
+- high-performing sellers
+- seller contribution to total sales
+- revenue distribution across sellers
+
+This aggregation is useful for business analytics and seller performance reporting.
+
+---
+
+## 🔹 Joining Total Revenue per Seller into `order_with_details`
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/Data-Cleaning-%26-Transformation/images/joing-the-total-revenue-per-seller-to-order-with-details.png?raw=true" width="900" alt="Joining seller total revenue into order_with_details">
+</p>
+
+The `total_revenue_per_seller` DataFrame was then joined back into `order_with_details` using `seller_id`.
+
+By doing this, each order-level record can also include the seller’s total accumulated revenue.
+
+This enriches the dataset and makes it more useful for:
+
+- seller-based analytics
+- ranking sellers
+- order-level revenue analysis with seller context
+
+---
+
+## 🔹 Saving the Final Cleaned Dataset in Parquet Format
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/Data-Cleaning-%26-Transformation/images/last-creating-and-saving-order-with-details-in-HDFS-in-parquet-format.png?raw=true" width="900" alt="Saving cleaned order_with_details dataframe to HDFS in parquet format">
+</p>
+
+Finally, a new folder was created in HDFS and the cleaned `order_with_details` DataFrame was saved in **Parquet** format.
+
+This step is important because Parquet is:
+
+- columnar
+- compressed
+- efficient for analytics workloads
+- well-suited for Spark and big data environments
+
+Saving the transformed data in Parquet prepares it for:
+
+- faster querying
+- downstream analytics
+- data warehousing
+- scalable processing pipelines
+
+---
+
+## ✅ Outcome of the Data Cleaning & Transformation Stage
+
+At the end of this stage, the raw e-commerce datasets were transformed into a cleaner and more analysis-ready dataset by:
+
+- identifying and handling missing values
+- removing duplicate records
+- correcting data types
+- improving categorical readability
+- filtering outliers
+- practicing numerical imputation
+- integrating multiple cleaned tables
+- generating seller-level revenue metrics
+- storing the final dataset in optimized Parquet format
+
+This makes the dataset more reliable and ready for the next stages of the data engineering workflow such as **data integration, aggregation, optimization, and serving**.
+
+---
+
+# 🚀 Next Stage
+
+The next stage of this project will focus on:
+
+## 🔗 Data Integration & Aggregation
+
+This stage focuses on combining and organizing the cleaned datasets into structured analytical datasets.
+
+Key objectives of this stage include:
+
+- 🔗 integrating multiple cleaned datasets  
+- 📊 aggregating metrics across different dimensions  
+- 🧮 computing business-level KPIs  
+- 🧑‍💼 analyzing seller performance  
+- 🛍️ analyzing customer purchasing behavior  
+- 🌍 exploring geographic patterns in orders and deliveries  
+
+Through these steps, the pipeline will transform the cleaned raw datasets into **analytics-ready datasets** that support deeper insights into the e-commerce platform.
+
+This stage prepares the data for:
+
+- 📈 business intelligence dashboards  
+- 📊 large-scale analytical queries  
+- 🧠 advanced data analysis and reporting  
+
+---
