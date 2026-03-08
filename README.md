@@ -628,7 +628,7 @@ This enriches the dataset and makes it more useful for:
 ## 🔹 Saving the Final Cleaned Dataset in Parquet Format
 
 <p align="center">
-<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/Data-Cleaning-%26-Transformation/images/last-creating-and-saving-order-with-details-in-HDFS-in-parquet-format.png?raw=true" width="900" alt="Saving cleaned order_with_details dataframe to HDFS in parquet format">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/Data-Cleaning-%26-Transformation/images/last-creating-and-saving-order-with-details-in-HDFS-in-parquet-format.png" width="900" alt="Saving cleaned order_with_details dataframe to HDFS in parquet format">
 </p>
 
 Finally, a new folder was created in HDFS and the cleaned `order_with_details` DataFrame was saved in **Parquet** format.
