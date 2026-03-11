@@ -667,29 +667,261 @@ This makes the dataset more reliable and ready for the next stages of the data e
 
 ---
 
-# 🚀 Next Stage
+# 4️⃣ Data integration, advanced aggregation, and enrichment
 
-The next stage of this project will focus on:
+This stage focuses on building a single analytics-ready dataset from the cleaned e-commerce tables, then extending that dataset through advanced aggregations and data enrichment.
 
-## 🔗 Data Integration & Aggregation
+The workflow in this stage covers three core parts:
 
-This stage focuses on combining and organizing the cleaned datasets into structured analytical datasets.
+- integrating multiple DataFrames into one consolidated dataset
+- creating advanced aggregated metrics for customers, sellers, products, and revenue trends
+- enriching the dataset with new analytical columns for time, status, segmentation, and revenue logic
 
-Key objectives of this stage include:
-
-- 🔗 integrating multiple cleaned datasets  
-- 📊 aggregating metrics across different dimensions  
-- 🧮 computing business-level KPIs  
-- 🧑‍💼 analyzing seller performance  
-- 🛍️ analyzing customer purchasing behavior  
-- 🌍 exploring geographic patterns in orders and deliveries  
-
-Through these steps, the pipeline will transform the cleaned raw datasets into **analytics-ready datasets** that support deeper insights into the e-commerce platform.
-
-This stage prepares the data for:
-
-- 📈 business intelligence dashboards  
-- 📊 large-scale analytical queries  
-- 🧠 advanced data analysis and reporting  
+By the end of this stage, the project produces a stronger analytical foundation for reporting, dashboarding, and deeper business analysis.
 
 ---
+
+## 🔹 Reading the datasets from HDFS
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Integration-%26-aggregation/images/data-integration-read-the-from-HDFS.png?raw=true" width="900" alt="Reading datasets from HDFS">
+</p>
+
+The cleaned source datasets were loaded from HDFS into Spark DataFrames to prepare them for large-scale processing.
+
+These datasets include:
+
+- `customer_df`
+- `orders_df`
+- `order_items_df`
+- `payments_df`
+- `reviews_df`
+- `products_df`
+- `sellers_df`
+- `geolocation_df`
+- `product_category_df`
+
+Loading the data from HDFS makes the pipeline ready for distributed joins, aggregations, and feature enrichment using PySpark.
+
+---
+
+## 🔹 Joining all DataFrames into a unified analytical dataset
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Integration-%26-aggregation/images/joining-all-data-frames-optimized.png?raw=true" width="900" alt="Joining all DataFrames with broadcast and cache optimization">
+</p>
+
+The DataFrames were joined step by step to create a consolidated dataset called `full_orders_df`.
+
+This integration combines important business information from multiple tables, including:
+
+- orders
+- order items
+- products
+- sellers
+- customers
+- geolocation
+- reviews
+- payments
+
+To improve performance, smaller reference tables were optimized using `broadcast()` joins, and the final integrated DataFrame was cached using `cache()`.
+
+This unified dataset becomes the main source for advanced aggregation and enrichment tasks across the project.
+
+---
+
+## 🔹 Customer retention analysis using first and last order dates
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Integration-%26-aggregation/images/advance%20-%20agg%20%20Customer%20Retention%20Analysis%20(%20First%20%26%20Last%20Order).png?raw=true" width="900" alt="Customer retention analysis using first and last order dates">
+</p>
+
+An advanced aggregation was created to analyze customer retention behavior by identifying each customer’s `first_order_date` and `last_order_date`.
+
+This aggregation also includes:
+
+- total number of orders per customer
+- average order value per customer
+
+This helps measure how active customers are over time and gives a clearer view of repeat purchasing behavior.
+
+---
+
+## 🔹 Monthly revenue and order count trend
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Integration-%26-aggregation/images/advance-agg%20%20Monthly%20Revenue%20and%20Order%20Count%20Trend.png?raw=true" width="900" alt="Monthly revenue and order count trend">
+</p>
+
+A monthly trend DataFrame was created by grouping records by `seller_id` and purchase month.
+
+This aggregation calculates:
+
+- total orders
+- total revenue
+- average order value
+- minimum order value
+- maximum order value
+
+This makes it easier to track revenue movement over time and compare seller performance across different months.
+
+---
+
+## 🔹 Product popularity metrics
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Integration-%26-aggregation/images/advance-agg%20Product%20Popularity%20Metrics.png?raw=true" width="900" alt="Product popularity metrics">
+</p>
+
+A product-level aggregation was built to measure how well each product performs in the marketplace.
+
+The generated metrics include:
+
+- total sales count
+- total revenue
+- average price
+- price volatility
+- unique sellers offering the product
+
+This helps identify best-selling products, products with unstable pricing, and products sold across multiple sellers.
+
+---
+
+## 🔹 Seller performance metrics
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Integration-%26-aggregation/images/advance-agg-Seller%20Performance%20Metrics%20(Revenue%2C%20Average%20Review%2C%20Order%20Count).png?raw=true" width="900" alt="Seller performance metrics">
+</p>
+
+A seller-level performance DataFrame was created to summarize seller activity and quality indicators.
+
+This aggregation includes:
+
+- total orders
+- total revenue
+- average review score
+- price variability
+
+These metrics help compare sellers not only by sales volume, but also by customer feedback and pricing behavior.
+
+---
+
+## 🔹 Total revenue and average order value per customer
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Integration-%26-aggregation/images/advance-agg-Total%20Revenue-%26-Average-Order-Value-(AOV)-per-Customer.png?raw=true" width="900" alt="Total revenue and average order value per customer">
+</p>
+
+A customer spending DataFrame was created to summarize each customer’s purchasing activity.
+
+This aggregation calculates:
+
+- total orders
+- total amount spent
+- average order value or `AOV`
+
+This gives a quick view of customer value and supports later customer segmentation tasks.
+
+---
+
+## 🔹 Customer segmentation based on spending
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Integration-%26-aggregation/images/data%20-%20enrichment%20Customer%20Segmentation%20based%20on%20spending.png?raw=true" width="900" alt="Customer segmentation based on spending">
+</p>
+
+The customer spending dataset was enriched by creating a `customer_segment` column based on average order value.
+
+Customers were grouped into segments such as:
+
+- `High-Value`
+- `Medium-Value`
+- `Low-Value`
+
+This enrichment helps make customer analysis more actionable and supports targeted reporting and segmentation strategies.
+
+---
+
+## 🔹 Hourly order distribution
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Integration-%26-aggregation/images/data%20-%20enrichment%20Hourly%20Order%20Distribution.png?raw=true" width="900" alt="Hourly order distribution">
+</p>
+
+A new column called `hour_of_day` was created from `order_purchase_timestamp` to capture the hour when each order was placed.
+
+This enrichment helps analyze:
+
+- peak ordering hours
+- customer buying patterns during the day
+- time-based sales behavior
+
+This field is useful for time-series exploration and hourly trend analysis.
+
+---
+
+## 🔹 Order status flags
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Integration-%26-aggregation/images/data%20-%20enrichment%20Order%20Status%20Flags.png?raw=true" width="900" alt="Order status flags">
+</p>
+
+Binary flag columns were added to simplify order status analysis.
+
+These new columns include:
+
+- `is_delivered`
+- `is_cancelled`
+
+This makes the dataset easier to use in downstream analysis, especially for filtering, KPI reporting, and operational dashboards.
+
+---
+
+## 🔹 Weekday vs weekend order classification
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Integration-%26-aggregation/images/data%20-%20enrichment%20Weekday%20vs%20Weekend%20Order.png?raw=true" width="900" alt="Weekday vs weekend order classification">
+</p>
+
+A new column called `order_day_type` was created to classify each purchase as either a weekday order or a weekend order.
+
+This enrichment helps compare:
+
+- weekday buying behavior
+- weekend buying behavior
+- order timing patterns across the week
+
+This is useful for trend reporting and customer behavior analysis.
+
+---
+
+## 🔹 Order revenue calculation
+
+<p align="center">
+<img src="https://github.com/LeynardPenaranda/Data-Engineering-Real-World-Project-Ecommerce-Dataset/blob/main/data-Integration-%26-aggregation/images/data%20enrichment%20Order%20Revenue%20Calculation.png?raw=true" width="900" alt="Order revenue calculation">
+</p>
+
+A new column called `order_revenue` was created by combining `price` and `freight_value`.
+
+This enrichment gives a more complete revenue measure at the order level and helps support:
+
+- revenue analysis
+- seller-level reporting
+- customer spending analysis
+- order profitability exploration
+
+This field makes the integrated dataset more useful for financial and operational analytics.
+
+---
+
+## 🔹 What this stage delivers
+
+This stage transforms the cleaned raw tables into a richer analytical environment by combining full DataFrame integration, advanced business aggregations, and feature-level enrichment.
+
+As a result, the project now has a stronger dataset for:
+
+- business intelligence dashboards
+- customer and seller analytics
+- product performance analysis
+- trend reporting
+- advanced Spark-based analytics
